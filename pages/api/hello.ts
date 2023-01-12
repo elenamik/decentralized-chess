@@ -22,7 +22,7 @@ interface Body extends NextApiRequest {
 }
 
 export default function handler(req: Body, res: NextApiResponse<Response>) {
-  if (req.method !== "POST") {
+  if (req.method !== "GET") {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 
@@ -31,7 +31,7 @@ export default function handler(req: Body, res: NextApiResponse<Response>) {
   if (!game || !player || !move) {
     return res.status(405).json({
       error:
-        "Did not recieve experected arguments. Recieved:" +
+        "Did not recieve expected arguments. Recieved:" +
         JSON.stringify(req.body),
     });
   }
