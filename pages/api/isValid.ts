@@ -26,7 +26,7 @@ export default function handler(req: Body, res: NextApiResponse<Response>) {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 
-  const { game, player, move } = req.body;
+  const { game, player, move } = req.query;
 
   if (!game || !player || !move) {
     return res.status(405).json({
