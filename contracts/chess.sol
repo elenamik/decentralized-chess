@@ -74,7 +74,7 @@ contract APIConsumer is ChainlinkClient, ConfirmedOwner {
         );
 
         // Set the URL to perform the GET request on
-        string memory baseUrl = "https://chess-api-two.vercel.app/api?";
+        string memory baseUrl = "https://chess-api-two.vercel.app/api/isValid?";
         string memory url = string(abi.encodePacked(baseUrl,"game=",address(this),"&player=",msg.sender,"&move=e4"));
 
         req.add(

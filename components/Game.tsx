@@ -53,6 +53,7 @@ export default function Game() {
     address: game?.gameAddress,
     abi: ChessABI,
     signerOrProvider: signer,
+    watch: true,
   });
 
   const { mutate, isLoading } = useMutation({
@@ -75,7 +76,6 @@ export default function Game() {
     address: game?.gameAddress,
     watch: true,
   });
-  console.log();
 
   const handleMove = () => {
     mutate({ move: moveInput });
