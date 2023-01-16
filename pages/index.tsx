@@ -1,11 +1,12 @@
 import { Button, Input } from "antd";
-import { useGameContext } from "contexts/game";
+import { ChessBoard } from "components/ChessBoard";
+import { useGameContext } from "contexts/gameContext";
 import React from "react";
 
 export default function Home() {
-  const { game, setGame } = useGameContext();
+  const { game, startGame } = useGameContext();
   const handleSubmit = () => {
-    setGame({ gameAddress: input });
+    startGame(input);
   };
 
   const [input, setInput] = React.useState<string>("");
@@ -25,5 +26,11 @@ export default function Home() {
         </Input.Group>
       </div>
     );
-  } else return <div>playing game: {game.gameAddress}</div>;
+  } else
+    return (
+      <div>
+        playing game: {game?.gameAddress}
+        <ChessBoard fen={game?.fen} />
+      </div>
+    );
 }
