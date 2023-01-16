@@ -48,13 +48,13 @@ contract APIConsumer is ChainlinkClient, ConfirmedOwner {
         fee = (1 * LINK_DIVISIBILITY) / 10; // 0,1 * 10**18 (Varies by network and job)
     }
 
-    function setUpGame(address white, address black) public returns (bool) {
+    function setUpGame(address white, address black) public returns (address, address) {
         WHITE = white;
         BLACK = black;
 
         FEN = _START_FEN;
         emit GameReady(WHITE, BLACK);
-        return true;
+        return (WHITE, BLACK);
     }
 
     /**

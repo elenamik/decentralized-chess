@@ -9,6 +9,10 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import {
+  useWeb3LoadingContext,
+  Web3LoadingProvider,
+} from "contexts/web3Loading";
 
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
@@ -29,6 +33,8 @@ export default function App({ Component, pageProps }: AppProps) {
     webSocketProvider,
   });
 
+  const { isWeb3Loading } = useWeb3LoadingContext();
+
   return (
     <>
       <Head>
@@ -48,10 +54,12 @@ export default function App({ Component, pageProps }: AppProps) {
         <QueryClientProvider client={queryClient}>
           <WagmiConfig client={client}>
             <RainbowKitProvider chains={chains}>
-              <GameProvider value={game}>
-                <ConnectButton />
-                <Component {...pageProps} />
-              </GameProvider>
+              <Web3LoadingProvider value={{ isWeb3Loading }}>
+                <GameProvider value={game}>
+                  <ConnectButton />
+                  <Component {...pageProps} />
+                </GameProvider>
+              </Web3LoadingProvider>
             </RainbowKitProvider>
           </WagmiConfig>
         </QueryClientProvider>

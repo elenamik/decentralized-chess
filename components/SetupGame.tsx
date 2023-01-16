@@ -1,13 +1,13 @@
 import { Button, Form, Input, Typography, Spin } from "antd";
-import { ChessBoard } from "components/ChessBoard";
 import { useGameContext } from "contexts/gameContext";
 import React from "react";
 import { useContract, useContractEvent, useProvider, useSigner } from "wagmi";
 import ChessABI from "contracts/chessABI";
 import { useMutation } from "react-query";
+import { useWeb3LoadingContext } from "contexts/web3Loading";
 const { Title } = Typography;
 
-const SetupGame: React.FC<{}> = ({}) => {
+const SetupGame: React.FC = () => {
   const provider = useProvider();
   const { data: signer } = useSigner();
 
@@ -19,7 +19,9 @@ const SetupGame: React.FC<{}> = ({}) => {
     signerOrProvider: signer ? signer : provider,
   });
 
-  const { data, mutate, isLoading } = useMutation({
+  const { isWeb3Loading, setIsWeb3Loading } = useWeb3LoadingContext();
+
+  const { mutate, isLoading } = useMutation({
     mutationKey: `${game?.gameAddress}-move`,
     mutationFn: (args: { p1: string; p2: string }) => {
       console.log("MAKING CALL", args);
@@ -27,15 +29,14 @@ const SetupGame: React.FC<{}> = ({}) => {
     },
     onSuccess: (data) => {
       console.log("Success", data);
+      setIsWeb3Loading(true);
     },
     onError: (error) => {
       console.log("Error", error);
     },
   });
-  console.log("Data", data);
 
   const onCreateGameSubmit = async (e: { p1: string; p2: string }) => {
-    console.log("SUBMIT", e);
     mutate({ p1: e.p1, p2: e.p2 });
   };
 
@@ -60,7 +61,6 @@ const SetupGame: React.FC<{}> = ({}) => {
         wrapperCol={{ span: 10 }}
         initialValues={{ remember: true }}
         onFinish={onCreateGameSubmit}
-        // onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
@@ -85,7 +85,7 @@ const SetupGame: React.FC<{}> = ({}) => {
           </Button>
         </Form.Item>
       </Form>
-      {isLoading && <Spin />}
+      {(isLoading || isWeb3Loading) && <Spin />}
     </div>
   );
 };

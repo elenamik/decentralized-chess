@@ -5,6 +5,7 @@ import React from "react";
 import { useContract, useContractEvent, useProvider, useSigner } from "wagmi";
 import ChessABI from "contracts/chessABI";
 import SetupGame from "components/SetupGame";
+import { useWeb3LoadingContext } from "contexts/web3Loading";
 
 export default function Home() {
   const provider = useProvider();
@@ -25,13 +26,15 @@ export default function Home() {
 
   const [input, setInput] = React.useState<string>("");
 
+  const { setIsWeb3Loading } = useWeb3LoadingContext();
+
   useContractEvent({
     address: game?.gameAddress,
     abi: ChessABI,
     eventName: "ValidateMove",
     // @ts-ignore
     listener(requestId: string, isValid: boolean) {
-      console.log("EVENT", requestId, isValid);
+      console.log("MOVE MADE", requestId, isValid);
     },
   });
 
@@ -41,7 +44,8 @@ export default function Home() {
     eventName: "GameReady",
     // @ts-ignore
     listener(requestId: string, isValid: boolean) {
-      console.log("EVENT", requestId, isValid);
+      setIsWeb3Loading(false);
+      console.log("GAME SET UP", requestId, isValid);
     },
   });
 

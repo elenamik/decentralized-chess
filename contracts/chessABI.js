@@ -47,6 +47,25 @@ const ChessABI = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: "address",
+        name: "white",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "black",
+        type: "address",
+      },
+    ],
+    name: "GameReady",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: "address",
         name: "from",
