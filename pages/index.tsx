@@ -2,16 +2,52 @@ import { Button, Input } from "antd";
 import { ChessBoard } from "components/ChessBoard";
 import { useGameContext } from "contexts/gameContext";
 import React from "react";
+import { useContract, useContractEvent, useProvider, useSigner } from "wagmi";
+import ChessABI from "contracts/chessABI";
+import SetupGame from "components/SetupGame";
+import { useWeb3LoadingContext } from "contexts/web3Loading";
 
 export default function Home() {
+  const provider = useProvider();
+  const { data: signer } = useSigner();
+
   const { game, startGame } = useGameContext();
   const handleSubmit = () => {
     startGame(input);
   };
 
+  const contract = useContract({
+    address: game?.gameAddress,
+    abi: ChessABI,
+    signerOrProvider: signer ? signer : provider,
+  });
+
   const [input, setInput] = React.useState<string>("");
 
-  if (!game) {
+  const { setIsWeb3Loading } = useWeb3LoadingContext();
+
+  useContractEvent({
+    address: game?.gameAddress,
+    abi: ChessABI,
+    eventName: "ValidateMove",
+    // @ts-ignore
+    listener(requestId: string, isValid: boolean) {
+      console.log("MOVE MADE", requestId, isValid);
+    },
+  });
+
+  useContractEvent({
+    address: game?.gameAddress,
+    abi: ChessABI,
+    eventName: "GameReady",
+    // @ts-ignore
+    listener(requestId: string, isValid: boolean) {
+      setIsWeb3Loading(false);
+      console.log("GAME SET UP", requestId, isValid);
+    },
+  });
+
+  if (!game || !game.gameAddress || game.gameAddress === "") {
     return (
       <div className="">
         <Input.Group>
@@ -26,11 +62,13 @@ export default function Home() {
         </Input.Group>
       </div>
     );
-  } else
-    return (
-      <div>
-        playing game: {game?.gameAddress}
-        <ChessBoard fen={game?.fen} />
-      </div>
-    );
+  } else if (contract!.FEN.name === "") {
+    return <SetupGame />;
+  }
+  return (
+    <div>
+      playing game: {game?.gameAddress}
+      <ChessBoard fen={game?.fen} />
+    </div>
+  );
 }

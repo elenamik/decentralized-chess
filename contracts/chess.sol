@@ -21,13 +21,16 @@ contract APIConsumer is ChainlinkClient, ConfirmedOwner {
     address public WHITE;
     address public BLACK;
     bool public success = false;
+    string public FEN;
 
     bytes32 private jobId;
     uint256 private fee;
 
-
+    string constant private _START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     event ValidateMove(bytes32 indexed requestId, bool isValid);
+    event GameReady(address white, address black);
+
 
     /**
      * @notice Initialize the link token and target oracle
@@ -43,6 +46,15 @@ contract APIConsumer is ChainlinkClient, ConfirmedOwner {
         setChainlinkOracle(0xCC79157eb46F5624204f47AB42b3906cAA40eaB7);
         jobId = "ca98366cc7314957b8c012c72f05aeeb";
         fee = (1 * LINK_DIVISIBILITY) / 10; // 0,1 * 10**18 (Varies by network and job)
+    }
+
+    function setUpGame(address white, address black) public returns (address, address) {
+        WHITE = white;
+        BLACK = black;
+
+        FEN = _START_FEN;
+        emit GameReady(WHITE, BLACK);
+        return (WHITE, BLACK);
     }
 
     /**

@@ -2,10 +2,38 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { GameProvider, useGameContext } from "contexts/gameContext";
+import { WagmiConfig, createClient } from "wagmi";
+import { configureChains, goerli } from "wagmi";
+import { publicProvider } from "wagmi/providers/public";
+import "@rainbow-me/rainbowkit/styles.css";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+
+import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import {
+  useWeb3LoadingContext,
+  Web3LoadingProvider,
+} from "contexts/web3Loading";
 
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
   const { game } = useGameContext();
+  const chains = [goerli];
+  const { provider, webSocketProvider } = configureChains(chains, [
+    publicProvider(),
+  ]);
+  const { connectors } = getDefaultWallets({
+    appName: "Decentralized Chess",
+    chains,
+  });
+
+  const client = createClient({
+    autoConnect: true,
+    provider: provider,
+    connectors: connectors,
+    webSocketProvider,
+  });
+
+  const { isWeb3Loading } = useWeb3LoadingContext();
 
   return (
     <>
@@ -24,9 +52,16 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <main>
         <QueryClientProvider client={queryClient}>
-          <GameProvider value={game}>
-            <Component {...pageProps} />
-          </GameProvider>
+          <WagmiConfig client={client}>
+            <RainbowKitProvider chains={chains}>
+              <Web3LoadingProvider value={{ isWeb3Loading }}>
+                <GameProvider value={game}>
+                  <ConnectButton />
+                  <Component {...pageProps} />
+                </GameProvider>
+              </Web3LoadingProvider>
+            </RainbowKitProvider>
+          </WagmiConfig>
         </QueryClientProvider>
       </main>
     </>
