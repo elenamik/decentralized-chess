@@ -1,28 +1,21 @@
 import { Button, Input } from "antd";
-import { ChessBoard } from "components/ChessBoard";
 import { useGameContext } from "contexts/gameContext";
 import React from "react";
-import { useContract, useContractEvent, useProvider, useSigner } from "wagmi";
+import { useContractEvent } from "wagmi";
 import ChessABI from "contracts/chessABI";
 import SetupGame from "components/SetupGame";
 import { useWeb3LoadingContext } from "contexts/web3Loading";
+import { useGame } from "hooks/useGame";
+import Game from "components/Game";
 
 export default function Home() {
-  const provider = useProvider();
-  const { data: signer } = useSigner();
-
-  const { game, startGame } = useGameContext();
+  const { game, selectGame } = useGameContext();
   const handleSubmit = () => {
-    startGame(input);
+    selectGame(gameAddressInput);
   };
 
-  const contract = useContract({
-    address: game?.gameAddress,
-    abi: ChessABI,
-    signerOrProvider: signer ? signer : provider,
-  });
-
-  const [input, setInput] = React.useState<string>("");
+  const { FEN } = useGame();
+  const [gameAddressInput, setGameAddressInput] = React.useState<string>("");
 
   const { setIsWeb3Loading } = useWeb3LoadingContext();
 
@@ -56,19 +49,14 @@ export default function Home() {
             placeholder="Input contract address of game"
             defaultValue={game?.gameAddress}
             style={{ width: "40%" }}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => setGameAddressInput(e.target.value)}
           />
           <Button onClick={handleSubmit}>Submit</Button>
         </Input.Group>
       </div>
     );
-  } else if (contract!.FEN.name === "") {
+  } else if (FEN === "") {
     return <SetupGame />;
   }
-  return (
-    <div>
-      playing game: {game?.gameAddress}
-      <ChessBoard fen={game?.fen} />
-    </div>
-  );
+  return <Game />;
 }

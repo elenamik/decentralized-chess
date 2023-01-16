@@ -1,14 +1,13 @@
 import { Button, Form, Input, Typography, Spin } from "antd";
 import { useGameContext } from "contexts/gameContext";
 import React from "react";
-import { useContract, useContractEvent, useProvider, useSigner } from "wagmi";
+import { useContract, useProvider, useSigner } from "wagmi";
 import ChessABI from "contracts/chessABI";
 import { useMutation } from "react-query";
 import { useWeb3LoadingContext } from "contexts/web3Loading";
 const { Title } = Typography;
 
 const SetupGame: React.FC = () => {
-  const provider = useProvider();
   const { data: signer } = useSigner();
 
   const { game } = useGameContext();
@@ -16,7 +15,7 @@ const SetupGame: React.FC = () => {
   const contract = useContract({
     address: game?.gameAddress,
     abi: ChessABI,
-    signerOrProvider: signer ? signer : provider,
+    signerOrProvider: signer,
   });
 
   const { isWeb3Loading, setIsWeb3Loading } = useWeb3LoadingContext();
@@ -75,7 +74,8 @@ const SetupGame: React.FC = () => {
           </Button>
         </Form.Item>
       </Form>
-      {(isLoading || isWeb3Loading) && <Spin />}
+      {isWeb3Loading && <Spin tip="Waiting For Block Confirmation" />}
+      {isLoading && <Spin tip="Submitting Request" />}
     </div>
   );
 };

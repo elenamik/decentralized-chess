@@ -1,10 +1,7 @@
 import React from "react";
-import { Chess } from "chess.js";
 
 type GameState = {
   gameAddress: string;
-  players?: [string, string];
-  fen?: string;
 };
 
 const getContractAddress = () => {
@@ -30,14 +27,13 @@ export const GameProvider: React.FC<React.ProviderProps<any>> = ({
     gameAddress: getContractAddress(),
   });
 
-  const startGame = (gameAddress: string) => {
-    const chess = new Chess();
-    setGame({ gameAddress: gameAddress, players: ["", ""], fen: chess.fen() });
+  const selectGame = (gameAddress: string) => {
+    setGame({ gameAddress: gameAddress });
   };
 
   return (
     <GameContext.Provider
-      value={{ game, setGame: setGame, startGame: startGame }}
+      value={{ game, setGame: setGame, selectGame: selectGame }}
     >
       {children}
     </GameContext.Provider>

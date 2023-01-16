@@ -20,8 +20,11 @@ contract APIConsumer is ChainlinkClient, ConfirmedOwner {
 
     address public WHITE;
     address public BLACK;
+    address public TO_MOVE;
+
     bool public success = false;
     string public FEN;
+
 
     bytes32 private jobId;
     uint256 private fee;
@@ -53,6 +56,8 @@ contract APIConsumer is ChainlinkClient, ConfirmedOwner {
         BLACK = black;
 
         FEN = _START_FEN;
+        TO_MOVE = WHITE;
+
         emit GameReady(WHITE, BLACK);
         return (WHITE, BLACK);
     }
@@ -61,7 +66,7 @@ contract APIConsumer is ChainlinkClient, ConfirmedOwner {
      * Create a Chainlink request to retrieve API response, find the target
      * data, then multiply by 1000000000000000000 (to remove decimal places from data).
      */
-    function checkValidMove() public returns (bytes32 requestId) {
+    function attemptMove(string move) public returns (bytes32 move) {
         Chainlink.Request memory req = buildChainlinkRequest(
             jobId,
             address(this),

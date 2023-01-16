@@ -22,6 +22,7 @@ interface Body extends NextApiRequest {
 }
 
 export default function handler(req: Body, res: NextApiResponse<Response>) {
+  console.log("GOT REQUEST", req.query);
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
