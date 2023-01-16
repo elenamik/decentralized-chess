@@ -15,14 +15,12 @@ export default function Home() {
   const handleSubmit = () => {
     startGame(input);
   };
-  console.log("Game", game);
 
   const contract = useContract({
     address: game?.gameAddress,
     abi: ChessABI,
     signerOrProvider: signer ? signer : provider,
   });
-  console.log("CONTRACT", contract);
 
   const [input, setInput] = React.useState<string>("");
 

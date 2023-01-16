@@ -24,7 +24,6 @@ const SetupGame: React.FC = () => {
   const { mutate, isLoading } = useMutation({
     mutationKey: `${game?.gameAddress}-move`,
     mutationFn: (args: { p1: string; p2: string }) => {
-      console.log("MAKING CALL", args);
       return contract!.setUpGame(args.p1, args.p2);
     },
     onSuccess: (data) => {
@@ -40,15 +39,6 @@ const SetupGame: React.FC = () => {
     mutate({ p1: e.p1, p2: e.p2 });
   };
 
-  useContractEvent({
-    address: game?.gameAddress,
-    abi: ChessABI,
-    eventName: "ValidateMove",
-    // @ts-ignore
-    listener(requestId: string, isValid: boolean) {
-      console.log("EVENT", requestId, isValid);
-    },
-  });
   return (
     <div>
       <Title>Set Up Game:</Title>
