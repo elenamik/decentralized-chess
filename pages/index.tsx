@@ -1,6 +1,8 @@
 import { Button, Input } from "antd";
-import { useGameContext } from "contexts/game";
+import { Chess } from "chess.js";
+import { useGameContext } from "contexts/gameContext";
 import React from "react";
+import { Chessboard } from "react-chessboard";
 
 export default function Home() {
   const { game, setGame } = useGameContext();
@@ -13,6 +15,7 @@ export default function Home() {
   if (!game) {
     return (
       <div className="">
+        <Game />
         <Input.Group>
           <Input
             addonBefore="Game Address"
@@ -27,3 +30,19 @@ export default function Home() {
     );
   } else return <div>playing game: {game.gameAddress}</div>;
 }
+
+export const Game: React.FC = () => {
+  const chess = new Chess();
+
+  const [fen, setFen] = React.useState<undefined | string>();
+  React.useEffect(() => {
+    if (typeof window !== "undefined") setFen(chess.fen());
+  }, []);
+
+  if (fen) {
+    return (
+      <Chessboard position={fen} boardWidth={600} arePiecesDraggable={false} />
+    );
+  }
+  return <></>;
+};
