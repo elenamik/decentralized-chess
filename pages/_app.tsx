@@ -1,9 +1,11 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { GameProvider, useGameContext } from "contexts/game";
 
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
+  const { game } = useGameContext();
 
   return (
     <>
@@ -22,7 +24,9 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <main>
         <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />;
+          <GameProvider value={game}>
+            <Component {...pageProps} />
+          </GameProvider>
         </QueryClientProvider>
       </main>
     </>
