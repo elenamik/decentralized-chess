@@ -3,6 +3,7 @@ pragma solidity ^0.8.7;
 
 import "@chainlink/contracts/src/v0.8/ChainlinkClient.sol";
 import "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 /**
  * Request testnet LINK and ETH here: https://faucets.chain.link/
@@ -24,6 +25,7 @@ contract APIConsumer is ChainlinkClient, ConfirmedOwner {
 
     bool public success = false;
     string public FEN;
+    string public URL;
 
 
     bytes32 private jobId;
@@ -66,7 +68,7 @@ contract APIConsumer is ChainlinkClient, ConfirmedOwner {
      * Create a Chainlink request to retrieve API response, find the target
      * data, then multiply by 1000000000000000000 (to remove decimal places from data).
      */
-    function attemptMove(string move) public returns (bytes32 move) {
+    function attemptMove(string memory move) public returns (bytes32 requestId) {
         Chainlink.Request memory req = buildChainlinkRequest(
             jobId,
             address(this),
@@ -75,7 +77,9 @@ contract APIConsumer is ChainlinkClient, ConfirmedOwner {
 
         // Set the URL to perform the GET request on
         string memory baseUrl = "https://chess-api-two.vercel.app/api/isValid?";
-        string memory url = string(abi.encodePacked(baseUrl,"game=",address(this),"&player=",msg.sender,"&move=e4"));
+        string memory url = string(abi.encodePacked(baseUrl,"game=",toString(address(this)),"&player=",toString(msg.sender),"&move=e4"));
+
+        URL = url;
 
         req.add(
             "get",
@@ -120,5 +124,9 @@ contract APIConsumer is ChainlinkClient, ConfirmedOwner {
             link.transfer(msg.sender, link.balanceOf(address(this))),
             "Unable to transfer"
         );
+    }
+
+    function toString(address addr) public pure returns(string memory) {
+        return Strings.toHexString(uint256(uint160(addr)), 20);
     }
 }
