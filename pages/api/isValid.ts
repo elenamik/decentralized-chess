@@ -2,7 +2,7 @@
 import { Chess } from "chess.js";
 import { ethers } from "ethers";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { goerliProvider } from "services/web3";
+import { goerliProvider } from "../../services/web3";
 import chessABI from "contracts/chessABI";
 
 type Data = {
