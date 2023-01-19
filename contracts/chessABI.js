@@ -1,26 +1,6 @@
 const ChessABI = [
   {
     inputs: [],
-    name: "acceptOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "attemptMove",
-    outputs: [
-      {
-        internalType: "bytes32",
-        name: "move",
-        type: "bytes32",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
     stateMutability: "nonpayable",
     type: "constructor",
   },
@@ -62,24 +42,6 @@ const ChessABI = [
     ],
     name: "ChainlinkRequested",
     type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "_requestId",
-        type: "bytes32",
-      },
-      {
-        internalType: "bool",
-        name: "_isValid",
-        type: "bool",
-      },
-    ],
-    name: "fulfillValidMove",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
   },
   {
     anonymous: false,
@@ -139,48 +101,6 @@ const ChessABI = [
     type: "event",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "white",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "black",
-        type: "address",
-      },
-    ],
-    name: "setUpGame",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-    ],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
     anonymous: false,
     inputs: [
       {
@@ -198,13 +118,6 @@ const ChessABI = [
     ],
     name: "ValidateMove",
     type: "event",
-  },
-  {
-    inputs: [],
-    name: "withdrawLink",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
   },
   {
     inputs: [],
@@ -234,32 +147,6 @@ const ChessABI = [
   },
   {
     inputs: [],
-    name: "owner",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "success",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "TO_MOVE",
     outputs: [
       {
@@ -282,6 +169,125 @@ const ChessABI = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "acceptOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "move",
+        type: "string",
+      },
+    ],
+    name: "attemptMove",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "requestId",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "_requestId",
+        type: "bytes32",
+      },
+      {
+        internalType: "bool",
+        name: "_isValid",
+        type: "bool",
+      },
+    ],
+    name: "fulfillValidMove",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "white",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "black",
+        type: "address",
+      },
+    ],
+    name: "setUpGame",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "success",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdrawLink",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];

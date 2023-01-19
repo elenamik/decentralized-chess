@@ -9,21 +9,25 @@ export const useGame = () => {
     address: game?.gameAddress,
     abi: ChessABI,
     functionName: "FEN",
+    watch: true,
   }) as { data: string };
   const { data: WHITE } = useContractRead({
     address: game?.gameAddress,
     abi: ChessABI,
     functionName: "WHITE",
+    watch: true,
   }) as { data: string };
   const { data: BLACK } = useContractRead({
     address: game?.gameAddress,
     abi: ChessABI,
     functionName: "BLACK",
+    watch: true,
   }) as { data: string };
   const { data: TO_MOVE } = useContractRead({
     address: game?.gameAddress,
     abi: ChessABI,
     functionName: "TO_MOVE",
+    watch: true,
   }) as { data: string };
 
   return { FEN, WHITE, BLACK, TO_MOVE };
