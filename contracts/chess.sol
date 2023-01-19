@@ -69,6 +69,10 @@ contract APIConsumer is ChainlinkClient, ConfirmedOwner {
      * data, then multiply by 1000000000000000000 (to remove decimal places from data).
      */
     function attemptMove(string memory move) public returns (bytes32 requestId) {
+        if (msg.sender != TO_MOVE) {
+            revert("Not your turn");
+        }
+
         Chainlink.Request memory req = buildChainlinkRequest(
             jobId,
             address(this),
@@ -77,7 +81,7 @@ contract APIConsumer is ChainlinkClient, ConfirmedOwner {
 
         // Set the URL to perform the GET request on
         string memory baseUrl = "https://chess-api-two.vercel.app/api/isValid?";
-        string memory url = string(abi.encodePacked(baseUrl,"game=",toString(address(this)),"&player=",toString(msg.sender),"&move=e4"));
+        string memory url = string(abi.encodePacked(baseUrl,"game=",toString(address(this)),"&move=",move));
 
         URL = url;
 
