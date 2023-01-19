@@ -84,11 +84,9 @@ export default function Game() {
     mutate({ move: moveInput });
   };
 
-  // @ts-ignore
   return (
     <div>
       <Title level={3}>game in progress at: {game?.gameAddress} </Title>
-
       <Title level={4}>White: {WHITE} </Title>
       <Title level={4}>Black: {BLACK} </Title>
       <Typography>{TO_MOVE} to move</Typography>
