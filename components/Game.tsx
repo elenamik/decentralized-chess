@@ -77,6 +77,9 @@ export default function Game() {
     watch: true,
   });
 
+  // @ts-ignore
+  const funds = (parseFloat(linkBal?.value) / 10 ** 18).toFixed(6);
+
   const handleMove = () => {
     mutate({ move: moveInput });
   };
@@ -84,14 +87,10 @@ export default function Game() {
   return (
     <div>
       <Title level={3}>game in progress at: {game?.gameAddress} </Title>
-
       <Title level={4}>White: {WHITE} </Title>
       <Title level={4}>Black: {BLACK} </Title>
       <Typography>{TO_MOVE} to move</Typography>
-      <Typography>
-        Game funds (in LINK):{" "}
-        {(parseFloat(linkBal?.value) / 10 ** 18).toFixed(6)}
-      </Typography>
+      <Typography>Game funds (in LINK): {funds}</Typography>
       <ChessBoard fen={FEN} />
       {allowMove && (
         <Input.Group>
