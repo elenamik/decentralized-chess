@@ -1,5 +1,10 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## TODOs:
+- [] read multi var from request (new FEN, valid)
+- [] set TO MOVE and FEN, record moves
+
+
 ## Getting Started
 
 First, run the development server:

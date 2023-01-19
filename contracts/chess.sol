@@ -92,10 +92,12 @@ contract APIConsumer is ChainlinkClient, ConfirmedOwner {
 
         // Set the path to find the desired data in the API response, where the response format is:
         //  {
-        //      "valid": true,
-        //      "game": "test",
-        //      "player": "WHITE",
-        //      "move": "e4"
+        //        valid: boolean;
+        //        game: string;
+        //        move: string;
+        //        FEN: string;
+        //        nextFEN?: string;
+        //        message?: string;
         //  }
 
         req.add("path", "valid"); // Chainlink nodes 1.0.0 and later support this format
